@@ -13,6 +13,7 @@ func _physics_process(delta: float) -> void:
 	match state:
 		"MoveState": move_state(delta)
 		"SprintState": sprint_state(delta)
+		"AttackState": pass
 
 func move_state(delta: float) -> void:
 	input_vector = Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
@@ -23,7 +24,10 @@ func move_state(delta: float) -> void:
 	
 	if Input.is_action_pressed("sprint") and input_vector != Vector2.ZERO:
 		playback.travel("SprintState")
-		
+	
+	if Input.is_action_just_pressed("attack"):
+		playback.travel("AttackState")
+	
 	velocity = input_vector * WALK_SPEED
 	move_and_slide()
 
@@ -44,3 +48,4 @@ func update_blend_positions(direction_vector: Vector2) -> void:
 	animation_tree.set("parameters/StateMachine/MoveState/Stand/blend_position", direction_vector)
 	animation_tree.set("parameters/StateMachine/MoveState/Walk/blend_position", direction_vector)
 	animation_tree.set("parameters/StateMachine/SprintState/blend_position", direction_vector)
+	animation_tree.set("parameters/StateMachine/AttackState/blend_position", direction_vector)
